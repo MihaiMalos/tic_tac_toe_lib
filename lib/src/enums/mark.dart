@@ -14,8 +14,10 @@ enum Mark {
   }
 
   static Mark parse(String str) {
-    if (str == 'x' || str == 'X') return Mark.x;
-    if (str == 'o' || str == 'O') return Mark.o;
-    return Mark.empty;
+    List<String> input = ['x', 'o', '.'];
+    List<Mark> output = [Mark.x, Mark.o, Mark.empty];
+    int index = input.indexOf(str);
+    if (index == -1) throw Exception("Invalid string");
+    return output[index];
   }
 }

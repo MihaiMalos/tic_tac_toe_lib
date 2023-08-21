@@ -93,7 +93,7 @@ class Board {
     final out = StringBuffer();
     for (var row in _board) {
       for (var element in row) {
-        out.write('${element.name} ');
+        out.write(element == Mark.empty ? '. ' : '${element.name} ');
       }
       out.write('\n');
     }

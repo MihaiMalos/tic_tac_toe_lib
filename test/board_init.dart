@@ -4,12 +4,16 @@ import 'package:test/test.dart';
 void main() {
   Game game = Game.create();
 
-  test('Board init', () {
-    for (int index = 0; index < 9; index++) {
-      final Position elementPos = Position(index ~/ 3, index % 3);
-      expect(game.getBoardElement(elementPos), Mark.empty);
-    }
-  });
+  group(
+      'Default constructor',
+      () => {
+            test('Board init', () {
+              for (int index = 0; index < 9; index++) {
+                final Position elementPos = Position(index ~/ 3, index % 3);
+                expect(game.getBoardElement(elementPos), Mark.empty);
+              }
+            })
+          });
 
   test('Place marks', () {
     final xPos = Position(0, 1);
