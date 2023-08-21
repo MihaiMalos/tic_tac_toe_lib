@@ -12,4 +12,10 @@ enum Mark {
     }
     return Mark.values[(index + 1) % 2];
   }
+
+  static Mark parse(String str) {
+    if (str == 'x' || str == 'X') return Mark.x;
+    if (str == 'o' || str == 'O') return Mark.o;
+    return Mark.empty;
+  }
 }

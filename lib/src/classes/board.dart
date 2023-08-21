@@ -4,14 +4,23 @@ import 'package:tic_tac_toe_lib/src/enums/mark.dart';
 import 'package:tic_tac_toe_lib/src/exceptions/exceptions.dart';
 
 typedef MarkMatrix = List<List<Mark>>;
+typedef CharMatrix = List<String>;
 
 class Board {
   static const size = 3;
-  final MarkMatrix _board;
+  late MarkMatrix _board;
 
   Board()
       : _board = List.generate(
             size, (rowIndex) => List.generate(size, (colIndex) => Mark.empty));
+
+  Board.fromString(CharMatrix board) {
+    for (String line in board) {
+      List<Mark> row = line.split(' ').map((str) => Mark.parse(str)).toList();
+      _board.add(row);
+    }
+  }
+
   Mark getElementByPos(Position pos) => _board[pos.row][pos.col];
   Mark getElementByPair(int row, int col) => _board[row][col];
 

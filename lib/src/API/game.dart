@@ -7,6 +7,7 @@ abstract class Game {
   factory Game.create() => GameImpl();
 
   void placeMark(Position pos);
+  Mark getBoardElement(Position pos);
   Mark get turn;
 
   bool addObserver(GameObserver observer);

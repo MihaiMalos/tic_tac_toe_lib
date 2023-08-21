@@ -16,11 +16,21 @@ class GameImpl extends GameObservable implements Game {
         _turn = Mark.x,
         _state = GameState.playing;
 
+  GameImpl.fromString(CharMatrix board, Mark turn, GameState state)
+      : _board = Board.fromString(board),
+        _turn = turn,
+        _state = state;
+
   @override
   Mark get turn => _turn;
 
   void _changeTurn() => _turn = _turn.opposite;
   void _changeState(GameState state) => _state = state;
+
+  @override
+  Mark getBoardElement(Position pos) {
+    return _board.getElementByPos(pos);
+  }
 
   @override
   void placeMark(Position pos) {
