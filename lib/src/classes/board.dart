@@ -15,6 +15,7 @@ class Board {
             size, (rowIndex) => List.generate(size, (colIndex) => Mark.empty));
 
   Board.fromString(CharMatrix board) {
+    _board = [];
     for (String line in board) {
       List<Mark> row = line.split(' ').map((str) => Mark.parse(str)).toList();
       _board.add(row);
@@ -24,7 +25,7 @@ class Board {
   Mark getElementByPos(Position pos) => _board[pos.row][pos.col];
   Mark getElementByPair(int row, int col) => _board[row][col];
 
-  void validation(Position pos) {
+  void positionValidation(Position pos) {
     if (!pos.isValid()) {
       throw OutOfBoundException('Specified position is not valid');
     }
@@ -35,7 +36,7 @@ class Board {
 
   bool isFull() {
     for (int row = 0; row < size; row++) {
-      if (_board[row].any((element) => !element.isSame(Mark.empty))) {
+      if (_board[row].any((element) => element.isSame(Mark.empty))) {
         return false;
       }
     }
@@ -84,7 +85,7 @@ class Board {
   }
 
   void placeMark(Position pos, Mark mark) {
-    validation(pos);
+    positionValidation(pos);
     _board[pos.row][pos.col] = mark;
   }
 
@@ -92,10 +93,12 @@ class Board {
   String toString() {
     final out = StringBuffer();
     for (var row in _board) {
-      for (var element in row) {
-        out.write(element == Mark.empty ? '. ' : '${element.name} ');
+      for (var index = 0; index < row.length; index++) {
+        final element = row[index];
+        out.write(element == Mark.empty ? '.' : element.name);
+        if (index != row.length - 1) out.write(' ');
       }
-      out.write('\n');
+      if (row != _board.last) out.write('\n');
     }
     return out.toString();
   }

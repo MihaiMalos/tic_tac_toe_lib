@@ -5,9 +5,10 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "tic_tac_toe_lib",
+            "name": "All Tests",
+            "type": "dart",
             "request": "launch",
-            "type": "dart"
+            "program": "test/", // or test/foo for a subset of tests
         }
     ]
 }

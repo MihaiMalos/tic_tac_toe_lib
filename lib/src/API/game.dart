@@ -6,6 +6,7 @@ import 'package:tic_tac_toe_lib/src/enums/mark.dart';
 abstract class Game {
   factory Game.create() => GameImpl();
 
+  int get boardSize;
   void placeMark(Position pos);
   Mark getBoardElement(Position pos);
   Mark get turn;
