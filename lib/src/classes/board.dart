@@ -22,8 +22,19 @@ class Board {
     }
   }
 
+  bool isEmptyPos(int row, int col) => getElementByPair(row, col).isEmpty;
+  MarkMatrix get configuration => _board;
   Mark getElementByPos(Position pos) => _board[pos.row][pos.col];
   Mark getElementByPair(int row, int col) => _board[row][col];
+
+  bool get isFull {
+    for (int row = 0; row < size; row++) {
+      if (_board[row].any((element) => element.isSame(Mark.empty))) {
+        return false;
+      }
+    }
+    return true;
+  }
 
   void positionValidation(Position pos) {
     if (!pos.isValid()) {
@@ -32,15 +43,6 @@ class Board {
     if (!getElementByPos(pos).isEmpty) {
       throw OcuppiedPositionException('Specified position is already ocuppied');
     }
-  }
-
-  bool isFull() {
-    for (int row = 0; row < size; row++) {
-      if (_board[row].any((element) => element.isSame(Mark.empty))) {
-        return false;
-      }
-    }
-    return true;
   }
 
   bool checkColumn(int col, Mark mark) {
@@ -81,7 +83,7 @@ class Board {
       return mark == Mark.x ? GameState.xWon : GameState.oWon;
     }
 
-    return isFull() ? GameState.tie : GameState.playing;
+    return isFull ? GameState.tie : GameState.playing;
   }
 
   void placeMark(Position pos, Mark mark) {

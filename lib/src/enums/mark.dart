@@ -6,12 +6,7 @@ enum Mark {
   bool get isEmpty => this == Mark.empty;
   bool isSame(Mark other) => this == other;
 
-  Mark get opposite {
-    if (isEmpty) {
-      return Mark.empty;
-    }
-    return Mark.values[(index + 1) % 2];
-  }
+  Mark get opposite => isEmpty ? Mark.empty : Mark.values[(index + 1) % 2];
 
   static Mark parse(String str) {
     List<String> input = ['x', 'o', '.'];
