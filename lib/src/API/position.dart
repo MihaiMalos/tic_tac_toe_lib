@@ -1,3 +1,5 @@
+typedef PositionList = List<Position>;
+
 class Position {
   final int _row, _col;
 

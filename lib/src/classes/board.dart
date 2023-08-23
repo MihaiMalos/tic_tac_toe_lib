@@ -24,8 +24,21 @@ class Board {
 
   bool isEmptyPos(int row, int col) => getElementByPair(row, col).isEmpty;
   MarkMatrix get configuration => _board;
+
+  PositionList get emptyPositions {
+    PositionList positions = [];
+    for (int row = 0; row < size; row++) {
+      for (int column = 0; column < size; column++) {
+        if (isEmptyPos(row, column)) positions.add(Position(row, column));
+      }
+    }
+    return positions;
+  }
+
   Mark getElementByPos(Position pos) => _board[pos.row][pos.col];
   Mark getElementByPair(int row, int col) => _board[row][col];
+
+  void clearElement(Position pos) => _board[pos.row][pos.col] = Mark.empty;
 
   bool get isFull {
     for (int row = 0; row < size; row++) {
@@ -75,14 +88,26 @@ class Board {
     return true;
   }
 
-  GameState checkWinning(Position pos, Mark mark) {
+  GameState checkWinningMove(Position pos, Mark mark) {
     if (checkRow(pos.row, mark) ||
         checkColumn(pos.col, mark) ||
         checkPrimaryDiagonal(mark) ||
         checkSecondaryDiagonal(mark)) {
-      return mark == Mark.x ? GameState.xWon : GameState.oWon;
+      return mark.toGameState;
     }
 
+    return isFull ? GameState.tie : GameState.playing;
+  }
+
+  GameState checkWinning(Mark mark) {
+    for (int index = 0; index < size; index++) {
+      if (checkRow(index, mark) || checkColumn(index, mark)) {
+        return mark.toGameState;
+      }
+    }
+    if (checkPrimaryDiagonal(mark) || checkSecondaryDiagonal(mark)) {
+      return mark.toGameState;
+    }
     return isFull ? GameState.tie : GameState.playing;
   }
 
