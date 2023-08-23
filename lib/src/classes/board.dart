@@ -8,14 +8,13 @@ typedef CharMatrix = List<String>;
 
 class Board {
   static const size = 3;
-  late MarkMatrix _board;
+  final MarkMatrix _board;
 
   Board()
       : _board = List.generate(
             size, (rowIndex) => List.generate(size, (colIndex) => Mark.empty));
 
-  Board.fromString(CharMatrix board) {
-    _board = [];
+  Board.fromString(CharMatrix board) : _board = [] {
     for (String line in board) {
       List<Mark> row = line.split(' ').map((str) => Mark.parse(str)).toList();
       _board.add(row);
@@ -42,7 +41,7 @@ class Board {
 
   bool get isFull {
     for (int row = 0; row < size; row++) {
-      if (_board[row].any((element) => element.isSame(Mark.empty))) {
+      if (_board[row].contains(Mark.empty)) {
         return false;
       }
     }

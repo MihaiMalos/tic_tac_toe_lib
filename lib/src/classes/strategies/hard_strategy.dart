@@ -40,16 +40,19 @@ class HardStrategy implements GameStrategy {
     double bestScore = isMaximizing ? double.negativeInfinity : double.infinity;
     final markToFill = isMaximizing ? mark : mark.opposite;
     final extremeValue = isMaximizing ? max : min;
-    double pruning = isMaximizing ? alpha : beta;
 
     final positions = board.emptyPositions;
 
     for (var position in positions) {
       board.placeMark(position, markToFill);
-      double score = minimax(board, mark, alpha, beta, false);
+      double score = minimax(board, mark, alpha, beta, !isMaximizing);
       board.clearElement(position);
       bestScore = extremeValue(score, bestScore);
-      pruning = extremeValue(pruning, score);
+      if (isMaximizing) {
+        alpha = extremeValue(alpha, score);
+      } else {
+        beta = extremeValue(beta, score);
+      }
       if (beta <= alpha) break;
     }
     return bestScore;
