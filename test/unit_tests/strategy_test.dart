@@ -5,7 +5,7 @@ void main() {
   test('First row', () {
     Game game = Game.create(strategy: Strategy.hard);
 
-    game.placeMark(Position(1, 2));
+    game.placeMark(Position(0, 0));
 
     print(game);
   });
