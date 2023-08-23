@@ -5,6 +5,7 @@
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:mockito/mockito.dart' as _i1;
 import 'package:tic_tac_toe_lib/src/API/game_observer.dart' as _i2;
+import 'package:tic_tac_toe_lib/src/API/position.dart';
 import 'package:tic_tac_toe_lib/src/enums/game_state.dart' as _i3;
 
 // ignore_for_file: type=lint
@@ -23,10 +24,10 @@ import 'package:tic_tac_toe_lib/src/enums/game_state.dart' as _i3;
 /// See the documentation for Mockito's code generation for more information.
 class MockGameObserver extends _i1.Mock implements _i2.GameObserver {
   @override
-  void onPlaceMark() => super.noSuchMethod(
+  void onPlaceMark(Position pos) => super.noSuchMethod(
         Invocation.method(
           #onPlaceMark,
-          [],
+          [pos],
         ),
         returnValueForMissingStub: null,
       );

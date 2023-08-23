@@ -46,7 +46,7 @@ class GameImpl extends GameObservable implements Game {
       throw GameOverException("Game is over, can't make anymore moves.");
     }
     _board.placeMark(pos, _turn);
-    _notifyPlaceMark();
+    _notifyPlaceMark(pos);
     _changeState(_board.checkWinningMove(pos, _turn));
     if (_state.isGameOver) _notifyGameOver(_state);
     _changeTurn();
@@ -55,7 +55,7 @@ class GameImpl extends GameObservable implements Game {
       // find a way to not duplicate code
       Position computerPos = _strategy!.getComputerPos(_board, _turn);
       _board.placeMark(computerPos, _turn);
-      _notifyPlaceMark();
+      _notifyPlaceMark(computerPos);
       _changeState(_board.checkWinningMove(computerPos, _turn));
       if (_state.isGameOver) _notifyGameOver(_state);
       _changeTurn();
@@ -81,9 +81,9 @@ class GameObservable {
     return _observers.remove(observer);
   }
 
-  void _notifyPlaceMark() {
+  void _notifyPlaceMark(Position pos) {
     for (var observer in _observers) {
-      observer.onPlaceMark();
+      observer.onPlaceMark(pos);
     }
   }
 

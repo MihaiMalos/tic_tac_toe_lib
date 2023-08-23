@@ -15,55 +15,64 @@ void main() {
       game.addObserver(observer);
     });
     test('Place mark', () {
-      game.placeMark(Position(0, 0));
-      game.placeMark(Position(0, 1));
-
-      verify(observer.onPlaceMark()).called(2);
+      PositionList positions = [Position(0, 0), Position(0, 1)];
+      for (var position in positions) {
+        game.placeMark(position);
+        verify(observer.onPlaceMark(position));
+      }
     });
 
     test('X wins', () {
-      game.placeMark(Position(0, 0));
-      game.placeMark(Position(1, 0));
+      PositionList positions = [
+        Position(0, 0),
+        Position(1, 0),
+        Position(0, 1),
+        Position(1, 1),
+        Position(0, 2),
+      ];
 
-      game.placeMark(Position(0, 1));
-      game.placeMark(Position(1, 1));
+      for (var position in positions) {
+        game.placeMark(position);
+        verify(observer.onPlaceMark(position));
+      }
 
-      game.placeMark(Position(0, 2));
-
-      verify(observer.onPlaceMark()).called(5);
       verify(observer.onGameOver(GameState.xWon));
     });
 
     test('O wins', () {
-      game.placeMark(Position(0, 0));
-      game.placeMark(Position(1, 0));
+      PositionList positions = [
+        Position(0, 0),
+        Position(1, 0),
+        Position(0, 1),
+        Position(1, 1),
+        Position(2, 0),
+        Position(1, 2),
+      ];
 
-      game.placeMark(Position(0, 1));
-      game.placeMark(Position(1, 1));
-
-      game.placeMark(Position(2, 0));
-      game.placeMark(Position(1, 2));
-
-      verify(observer.onPlaceMark()).called(6);
+      for (var position in positions) {
+        game.placeMark(position);
+        verify(observer.onPlaceMark(position));
+      }
       verify(observer.onGameOver(GameState.oWon));
     });
 
     test('Tie', () {
-      game.placeMark(Position(0, 0));
-      game.placeMark(Position(1, 0));
+      PositionList positions = [
+        Position(0, 0),
+        Position(1, 0),
+        Position(0, 1),
+        Position(1, 1),
+        Position(2, 0),
+        Position(0, 2),
+        Position(2, 2),
+        Position(2, 1),
+        Position(1, 2),
+      ];
 
-      game.placeMark(Position(0, 1));
-      game.placeMark(Position(1, 1));
-
-      game.placeMark(Position(2, 0));
-      game.placeMark(Position(0, 2));
-
-      game.placeMark(Position(2, 2));
-      game.placeMark(Position(2, 1));
-
-      game.placeMark(Position(1, 2));
-
-      verify(observer.onPlaceMark()).called(9);
+      for (var position in positions) {
+        game.placeMark(position);
+        verify(observer.onPlaceMark(position));
+      }
       verify(observer.onGameOver(GameState.tie));
     });
   });

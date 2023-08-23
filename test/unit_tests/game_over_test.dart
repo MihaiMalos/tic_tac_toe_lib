@@ -1,6 +1,5 @@
 import 'package:test/test.dart';
 import 'package:tic_tac_toe_lib/src/classes/game_impl.dart';
-import 'package:tic_tac_toe_lib/src/exceptions/exceptions.dart';
 import 'package:tic_tac_toe_lib/tic_tac_toe_lib.dart';
 
 void main() {
