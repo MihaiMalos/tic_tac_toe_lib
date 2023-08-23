@@ -4,9 +4,9 @@
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:mockito/mockito.dart' as _i1;
-import 'package:tic_tac_toe_lib/src/API/game_observer.dart' as _i2;
-import 'package:tic_tac_toe_lib/src/API/position.dart';
-import 'package:tic_tac_toe_lib/src/enums/game_state.dart' as _i3;
+import 'package:tic_tac_toe_lib/src/API/classes/game_observer.dart' as _i2;
+import 'package:tic_tac_toe_lib/src/API/enums/game_state.dart' as _i3;
+import 'package:tic_tac_toe_lib/tic_tac_toe_lib.dart';
 
 // ignore_for_file: type=lint
 // ignore_for_file: avoid_redundant_argument_values

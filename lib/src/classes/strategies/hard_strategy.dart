@@ -1,12 +1,7 @@
 import 'dart:math';
 
-import 'package:tic_tac_toe_lib/src/API/game_strategy.dart';
-import 'package:tic_tac_toe_lib/src/API/position.dart';
 import 'package:tic_tac_toe_lib/src/classes/board.dart';
-import 'package:tic_tac_toe_lib/src/enums/game_state.dart';
-import 'package:tic_tac_toe_lib/src/enums/mark.dart';
-
-int cnt = 0;
+import 'package:tic_tac_toe_lib/tic_tac_toe_lib.dart';
 
 class HardStrategy implements GameStrategy {
   @override
@@ -36,37 +31,27 @@ class HardStrategy implements GameStrategy {
 
   double minimax(
       Board board, Mark mark, double alpha, double beta, bool isMaximizing) {
-    cnt++;
     GameState result;
     isMaximizing
         ? result = board.checkWinning(mark)
         : result = board.checkWinning(mark.opposite);
     if (result.isGameOver) return scores[result];
 
-    if (isMaximizing) {
-      double bestScore = double.negativeInfinity;
-      final positions = board.emptyPositions;
-      for (var position in positions) {
-        board.placeMark(position, mark);
-        double score = minimax(board, mark, alpha, beta, false);
-        board.clearElement(position);
-        bestScore = max(score, bestScore);
-        alpha = max(alpha, score);
-        if (beta <= alpha) break;
-      }
-      return bestScore;
-    } else {
-      double bestScore = double.infinity;
-      final positions = board.emptyPositions;
-      for (var position in positions) {
-        board.placeMark(position, mark.opposite);
-        double score = minimax(board, mark, alpha, beta, true);
-        board.clearElement(position);
-        bestScore = min(score, bestScore);
-        beta = min(beta, score);
-        if (beta <= alpha) break;
-      }
-      return bestScore;
+    double bestScore = isMaximizing ? double.negativeInfinity : double.infinity;
+    final markToFill = isMaximizing ? mark : mark.opposite;
+    final extremeValue = isMaximizing ? max : min;
+    var pruning = isMaximizing ? alpha : beta;
+
+    final positions = board.emptyPositions;
+
+    for (var position in positions) {
+      board.placeMark(position, markToFill);
+      double score = minimax(board, mark, alpha, beta, false);
+      board.clearElement(position);
+      bestScore = extremeValue(score, bestScore);
+      pruning = extremeValue(pruning, score);
+      if (beta <= alpha) break;
     }
+    return bestScore;
   }
 }

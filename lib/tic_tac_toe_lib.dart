@@ -1,10 +1,10 @@
 library tic_tac_toe_lib;
 
-export 'src/API/game.dart';
-export 'src/API/position.dart';
-export 'src/API/game_observer.dart';
-export 'src/API/game_strategy.dart';
-export 'src/enums/game_state.dart';
-export 'src/enums/mark.dart';
-export 'src/enums/strategy.dart';
-export 'src/exceptions/exceptions.dart';
+export 'src/API/classes/game.dart';
+export 'src/API/classes/position.dart';
+export 'src/API/classes/game_observer.dart';
+export 'src/API/classes/game_strategy.dart';
+export 'src/API/enums/game_state.dart';
+export 'src/API/enums/mark.dart';
+export 'src/API/enums/strategy.dart';
+export 'src/API/exceptions/exceptions.dart';

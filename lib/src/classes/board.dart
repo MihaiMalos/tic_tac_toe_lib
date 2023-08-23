@@ -1,7 +1,7 @@
-import 'package:tic_tac_toe_lib/src/API/position.dart';
-import 'package:tic_tac_toe_lib/src/enums/game_state.dart';
-import 'package:tic_tac_toe_lib/src/enums/mark.dart';
-import 'package:tic_tac_toe_lib/src/exceptions/exceptions.dart';
+import 'package:tic_tac_toe_lib/src/API/classes/position.dart';
+import 'package:tic_tac_toe_lib/src/API/enums/game_state.dart';
+import 'package:tic_tac_toe_lib/src/API/enums/mark.dart';
+import 'package:tic_tac_toe_lib/src/API/exceptions/exceptions.dart';
 
 typedef MarkMatrix = List<List<Mark>>;
 typedef CharMatrix = List<String>;
@@ -49,7 +49,7 @@ class Board {
     return true;
   }
 
-  void positionValidation(Position pos) {
+  void validatePosition(Position pos) {
     if (!pos.isValid()) {
       throw OutOfBoundException('Specified position is not valid');
     }
@@ -112,21 +112,16 @@ class Board {
   }
 
   void placeMark(Position pos, Mark mark) {
-    positionValidation(pos);
+    validatePosition(pos);
     _board[pos.row][pos.col] = mark;
   }
 
   @override
   String toString() {
-    final out = StringBuffer();
-    for (var row in _board) {
-      for (var index = 0; index < row.length; index++) {
-        final element = row[index];
-        out.write(element == Mark.empty ? '.' : element.name);
-        if (index != row.length - 1) out.write(' ');
-      }
-      if (row != _board.last) out.write('\n');
-    }
-    return out.toString();
+    return _board
+        .map((row) => row
+            .map((element) => element == Mark.empty ? '.' : element.name)
+            .join(' '))
+        .join('\n');
   }
 }
