@@ -1,21 +1,21 @@
-import 'package:tic_tac_toe_lib/src/classes/board.dart';
+import 'package:tic_tac_toe_lib/src/classes/board_impl.dart';
 import 'package:tic_tac_toe_lib/tic_tac_toe_lib.dart';
 
 class GameImpl extends GameObservable implements Game {
-  final Board _board;
+  final BoardImpl _board;
   Mark _turn;
   GameState _state;
   final GameStrategy? _strategy;
 
   GameImpl({Strategy strategy = Strategy.twoPlayers})
-      : _board = Board(),
+      : _board = BoardImpl(),
         _turn = Mark.x,
         _state = GameState.playing,
         _strategy = strategy.convertToObj;
 
   GameImpl.fromString(CharMatrix board, Mark turn, GameState state,
       [Strategy strategy = Strategy.twoPlayers])
-      : _board = Board.fromString(board),
+      : _board = BoardImpl.fromString(board),
         _turn = turn,
         _state = state,
         _strategy = strategy.convertToObj;
@@ -23,15 +23,12 @@ class GameImpl extends GameObservable implements Game {
   @override
   Mark get turn => _turn;
   @override
-  int get boardSize => Board.size;
+  int get boardSize => BoardImpl.size;
+  @override
+  Board get board => _board;
 
   void _changeTurn() => _turn = _turn.opposite;
   void _changeState(GameState state) => _state = state;
-
-  @override
-  Mark getBoardElement(Position pos) {
-    return _board.getElementByPos(pos);
-  }
 
   @override
   void placeMark(Position pos) {

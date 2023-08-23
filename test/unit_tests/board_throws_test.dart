@@ -1,17 +1,17 @@
-import 'package:tic_tac_toe_lib/src/classes/board.dart';
+import 'package:tic_tac_toe_lib/src/classes/board_impl.dart';
 import 'package:test/test.dart';
 import 'package:tic_tac_toe_lib/tic_tac_toe_lib.dart';
 
 void main() {
   group('Exception throws', () {
-    late Board game;
+    late BoardImpl game;
     List<String> board = [
       "x . o",
       ". . .",
       ". x .",
     ];
     setUp(() {
-      game = Board.fromString(board);
+      game = BoardImpl.fromString(board);
     });
 
     test('Invalid position', () {

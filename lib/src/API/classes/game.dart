@@ -7,7 +7,7 @@ abstract class Game {
 
   Mark get turn;
   int get boardSize;
-  Mark getBoardElement(Position pos);
+  Board get board;
 
   void placeMark(Position pos);
 

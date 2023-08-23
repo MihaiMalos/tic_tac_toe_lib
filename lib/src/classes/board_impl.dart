@@ -1,3 +1,4 @@
+import 'package:tic_tac_toe_lib/src/API/classes/board.dart';
 import 'package:tic_tac_toe_lib/src/API/classes/position.dart';
 import 'package:tic_tac_toe_lib/src/API/enums/game_state.dart';
 import 'package:tic_tac_toe_lib/src/API/enums/mark.dart';
@@ -6,24 +7,22 @@ import 'package:tic_tac_toe_lib/src/API/exceptions/exceptions.dart';
 typedef MarkMatrix = List<List<Mark>>;
 typedef CharMatrix = List<String>;
 
-class Board {
+class BoardImpl implements Board {
   static const size = 3;
   final MarkMatrix _board;
 
-  Board()
+  BoardImpl()
       : _board = List.generate(
             size, (rowIndex) => List.generate(size, (colIndex) => Mark.empty));
 
-  Board.fromString(CharMatrix board) : _board = [] {
+  BoardImpl.fromString(CharMatrix board) : _board = [] {
     for (String line in board) {
       List<Mark> row = line.split(' ').map((str) => Mark.parse(str)).toList();
       _board.add(row);
     }
   }
 
-  bool isEmptyPos(int row, int col) => getElementByPair(row, col).isEmpty;
-  MarkMatrix get configuration => _board;
-
+  @override
   PositionList get emptyPositions {
     PositionList positions = [];
     for (int row = 0; row < size; row++) {
@@ -34,11 +33,12 @@ class Board {
     return positions;
   }
 
+  @override
   Mark getElementByPos(Position pos) => _board[pos.row][pos.col];
+  @override
   Mark getElementByPair(int row, int col) => _board[row][col];
 
-  void clearElement(Position pos) => _board[pos.row][pos.col] = Mark.empty;
-
+  @override
   bool get isFull {
     for (int row = 0; row < size; row++) {
       if (_board[row].contains(Mark.empty)) {
@@ -46,6 +46,50 @@ class Board {
       }
     }
     return true;
+  }
+
+  @override
+  void clearElement(Position pos) => _board[pos.row][pos.col] = Mark.empty;
+
+  @override
+  void placeMark(Position pos, Mark mark) {
+    validatePosition(pos);
+    _board[pos.row][pos.col] = mark;
+  }
+
+  @override
+  GameState checkWinning(Mark mark) {
+    for (int index = 0; index < size; index++) {
+      if (checkRow(index, mark) || checkColumn(index, mark)) {
+        return mark.toGameState;
+      }
+    }
+    if (checkPrimaryDiagonal(mark) || checkSecondaryDiagonal(mark)) {
+      return mark.toGameState;
+    }
+    return isFull ? GameState.tie : GameState.playing;
+  }
+
+  @override
+  String toString() {
+    return _board
+        .map((row) => row
+            .map((element) => element == Mark.empty ? '.' : element.name)
+            .join(' '))
+        .join('\n');
+  }
+
+  bool isEmptyPos(int row, int col) => getElementByPair(row, col).isEmpty;
+
+  GameState checkWinningMove(Position pos, Mark mark) {
+    if (checkRow(pos.row, mark) ||
+        checkColumn(pos.col, mark) ||
+        checkPrimaryDiagonal(mark) ||
+        checkSecondaryDiagonal(mark)) {
+      return mark.toGameState;
+    }
+
+    return isFull ? GameState.tie : GameState.playing;
   }
 
   void validatePosition(Position pos) {
@@ -85,42 +129,5 @@ class Board {
       }
     }
     return true;
-  }
-
-  GameState checkWinningMove(Position pos, Mark mark) {
-    if (checkRow(pos.row, mark) ||
-        checkColumn(pos.col, mark) ||
-        checkPrimaryDiagonal(mark) ||
-        checkSecondaryDiagonal(mark)) {
-      return mark.toGameState;
-    }
-
-    return isFull ? GameState.tie : GameState.playing;
-  }
-
-  GameState checkWinning(Mark mark) {
-    for (int index = 0; index < size; index++) {
-      if (checkRow(index, mark) || checkColumn(index, mark)) {
-        return mark.toGameState;
-      }
-    }
-    if (checkPrimaryDiagonal(mark) || checkSecondaryDiagonal(mark)) {
-      return mark.toGameState;
-    }
-    return isFull ? GameState.tie : GameState.playing;
-  }
-
-  void placeMark(Position pos, Mark mark) {
-    validatePosition(pos);
-    _board[pos.row][pos.col] = mark;
-  }
-
-  @override
-  String toString() {
-    return _board
-        .map((row) => row
-            .map((element) => element == Mark.empty ? '.' : element.name)
-            .join(' '))
-        .join('\n');
   }
 }
