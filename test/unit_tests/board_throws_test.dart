@@ -14,7 +14,7 @@ void main() {
       game = Board.fromString(board);
     });
 
-    test('Invalid positionn', () {
+    test('Invalid position', () {
       expect(() => game.placeMark(Position(69, 3), Mark.o),
           throwsA(isA<OutOfBoundException>()));
     });
