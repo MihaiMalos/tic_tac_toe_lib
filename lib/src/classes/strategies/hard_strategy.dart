@@ -40,7 +40,7 @@ class HardStrategy implements GameStrategy {
     double bestScore = isMaximizing ? double.negativeInfinity : double.infinity;
     final markToFill = isMaximizing ? mark : mark.opposite;
     final extremeValue = isMaximizing ? max : min;
-    var pruning = isMaximizing ? alpha : beta;
+    double pruning = isMaximizing ? alpha : beta;
 
     final positions = board.emptyPositions;
 
