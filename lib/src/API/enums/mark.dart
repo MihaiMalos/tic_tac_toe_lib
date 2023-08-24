@@ -1,5 +1,7 @@
 import 'package:tic_tac_toe_lib/src/API/enums/game_state.dart';
 
+typedef MarkMatrix = List<List<Mark>>;
+
 enum Mark {
   x,
   o,

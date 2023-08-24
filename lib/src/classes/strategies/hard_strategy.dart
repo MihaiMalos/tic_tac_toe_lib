@@ -1,7 +1,14 @@
 import 'dart:math';
 
-import 'package:tic_tac_toe_lib/src/classes/board_impl.dart';
 import 'package:tic_tac_toe_lib/tic_tac_toe_lib.dart';
+
+extension on Board {
+  void placeMark(Position pos, Mark mark) =>
+      configuration[pos.row][pos.col] = mark;
+
+  void clearElement(Position pos) =>
+      configuration[pos.row][pos.col] = Mark.empty;
+}
 
 class HardStrategy implements GameStrategy {
   @override
@@ -33,8 +40,8 @@ class HardStrategy implements GameStrategy {
       Board board, Mark mark, double alpha, double beta, bool isMaximizing) {
     GameState result;
     isMaximizing
-        ? result = board.checkWinning(mark)
-        : result = board.checkWinning(mark.opposite);
+        ? result = board.checkWinning(mark.opposite)
+        : result = board.checkWinning(mark);
     if (result.isGameOver) return scores[result];
 
     double bestScore = isMaximizing ? double.negativeInfinity : double.infinity;

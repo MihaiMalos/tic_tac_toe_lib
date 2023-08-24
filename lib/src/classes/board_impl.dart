@@ -4,7 +4,6 @@ import 'package:tic_tac_toe_lib/src/API/enums/game_state.dart';
 import 'package:tic_tac_toe_lib/src/API/enums/mark.dart';
 import 'package:tic_tac_toe_lib/src/API/exceptions/exceptions.dart';
 
-typedef MarkMatrix = List<List<Mark>>;
 typedef CharMatrix = List<String>;
 
 class BoardImpl implements Board {
@@ -23,6 +22,14 @@ class BoardImpl implements Board {
   }
 
   @override
+  MarkMatrix get configuration => _board;
+
+  @override
+  Mark getElementByPos(Position pos) => _board[pos.row][pos.col];
+  @override
+  Mark getElementByPair(int row, int col) => _board[row][col];
+
+  @override
   PositionList get emptyPositions {
     PositionList positions = [];
     for (int row = 0; row < size; row++) {
@@ -34,11 +41,6 @@ class BoardImpl implements Board {
   }
 
   @override
-  Mark getElementByPos(Position pos) => _board[pos.row][pos.col];
-  @override
-  Mark getElementByPair(int row, int col) => _board[row][col];
-
-  @override
   bool get isFull {
     for (int row = 0; row < size; row++) {
       if (_board[row].contains(Mark.empty)) {
@@ -46,15 +48,6 @@ class BoardImpl implements Board {
       }
     }
     return true;
-  }
-
-  @override
-  void clearElement(Position pos) => _board[pos.row][pos.col] = Mark.empty;
-
-  @override
-  void placeMark(Position pos, Mark mark) {
-    validatePosition(pos);
-    _board[pos.row][pos.col] = mark;
   }
 
   @override
@@ -77,6 +70,11 @@ class BoardImpl implements Board {
             .map((element) => element == Mark.empty ? '.' : element.name)
             .join(' '))
         .join('\n');
+  }
+
+  void placeMark(Position pos, Mark mark) {
+    validatePosition(pos);
+    _board[pos.row][pos.col] = mark;
   }
 
   bool isEmptyPos(int row, int col) => getElementByPair(row, col).isEmpty;
