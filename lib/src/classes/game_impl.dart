@@ -25,7 +25,7 @@ class GameImpl extends GameObservable implements Game {
   @override
   int get boardSize => BoardImpl.size;
   @override
-  Board get board => _board;
+  MarkMatrix get boardRepresentation => MarkMatrix.from(_board.configuration);
 
   void _changeTurn() => _turn = _turn.opposite;
   void _changeState(GameState state) => _state = state;

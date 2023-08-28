@@ -12,18 +12,15 @@ void main() {
 
     test('Board init', () {
       for (int index = 0; index < 9; index++) {
-        final Position elementPos = Position(index ~/ 3, index % 3);
-        expect(game.board.getElementByPos(elementPos), Mark.empty);
+        expect(game.boardRepresentation[index ~/ 3][index % 3], Mark.empty);
       }
     });
 
     test('Place marks', () {
-      final xPos = Position(0, 1);
-      final oPos = Position(1, 1);
-      game.placeMark(xPos);
-      expect(game.board.getElementByPos(xPos), Mark.x);
-      game.placeMark(oPos);
-      expect(game.board.getElementByPos(oPos), Mark.o);
+      game.placeMark(Position(0, 1));
+      expect(game.boardRepresentation[0][1], Mark.x);
+      game.placeMark(Position(1, 1));
+      expect(game.boardRepresentation[1][1], Mark.o);
     });
   });
 
