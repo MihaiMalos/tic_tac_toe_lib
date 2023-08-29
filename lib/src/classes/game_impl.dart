@@ -4,16 +4,16 @@ import 'package:tic_tac_toe_lib/tic_tac_toe_lib.dart';
 class GameImpl extends GameObservable implements Game {
   final BoardImpl _board;
   Mark _turn;
-  GameState _state;
+  GameEvent _state;
   final GameStrategy? _strategy;
 
   GameImpl({Strategy strategy = Strategy.twoPlayers})
       : _board = BoardImpl(),
         _turn = Mark.x,
-        _state = GameState.playing,
+        _state = GameEvent.playing,
         _strategy = strategy.convertToObj;
 
-  GameImpl.fromString(CharMatrix board, Mark turn, GameState state,
+  GameImpl.fromString(CharMatrix board, Mark turn, GameEvent state,
       [Strategy strategy = Strategy.twoPlayers])
       : _board = BoardImpl.fromString(board),
         _turn = turn,
@@ -28,7 +28,7 @@ class GameImpl extends GameObservable implements Game {
   MarkMatrix get boardRepresentation => MarkMatrix.from(_board.configuration);
 
   void _changeTurn() => _turn = _turn.opposite;
-  void _changeState(GameState state) => _state = state;
+  void _changeState(GameEvent state) => _state = state;
 
   @override
   void placeMark(Position pos) {
@@ -77,7 +77,7 @@ class GameObservable {
     }
   }
 
-  void _notifyGameOver(GameState state) {
+  void _notifyGameOver(GameEvent state) {
     for (var observer in _observers) {
       observer.onGameOver(state);
     }

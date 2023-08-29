@@ -11,7 +11,7 @@ void main() {
       ". . .",
     ];
     setUp(() {
-      game = GameImpl.fromString(board, Mark.x, GameState.playing);
+      game = GameImpl.fromString(board, Mark.x, GameEvent.playing);
     });
 
     test('First row', () {
@@ -54,7 +54,7 @@ void main() {
       ". . .",
     ];
     setUp(() {
-      game = GameImpl.fromString(board, Mark.x, GameState.playing);
+      game = GameImpl.fromString(board, Mark.x, GameEvent.playing);
     });
 
     test('First column', () {
@@ -96,7 +96,7 @@ void main() {
       "x . x",
     ];
     setUp(() {
-      game = GameImpl.fromString(board, Mark.x, GameState.playing);
+      game = GameImpl.fromString(board, Mark.x, GameEvent.playing);
     });
 
     test('Primary diagonal', () {

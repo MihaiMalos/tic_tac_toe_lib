@@ -31,14 +31,14 @@ class HardStrategy implements GameStrategy {
   }
 
   Map scores = {
-    GameState.oWon: 1.0,
-    GameState.tie: 0.0,
-    GameState.xWon: -1.0,
+    GameEvent.oWon: 1.0,
+    GameEvent.tie: 0.0,
+    GameEvent.xWon: -1.0,
   };
 
   double minimax(
       Board board, Mark mark, double alpha, double beta, bool isMaximizing) {
-    GameState result;
+    GameEvent result;
     isMaximizing
         ? result = board.checkWinning(mark.opposite)
         : result = board.checkWinning(mark);

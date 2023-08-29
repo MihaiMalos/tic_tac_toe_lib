@@ -32,7 +32,7 @@ void main() {
       ". x .",
     ];
     setUp(() {
-      game = GameImpl.fromString(board, Mark.o, GameState.playing);
+      game = GameImpl.fromString(board, Mark.o, GameEvent.playing);
     });
 
     test('Board init', () {

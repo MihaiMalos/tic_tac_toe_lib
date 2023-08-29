@@ -9,5 +9,5 @@ abstract interface class Board {
   PositionList get emptyPositions;
   bool get isFull;
 
-  GameState checkWinning(Mark mark);
+  GameEvent checkWinning(Mark mark);
 }

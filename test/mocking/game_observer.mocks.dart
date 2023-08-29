@@ -5,7 +5,7 @@
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:mockito/mockito.dart' as _i1;
 import 'package:tic_tac_toe_lib/src/API/classes/game_observer.dart' as _i2;
-import 'package:tic_tac_toe_lib/src/API/enums/game_state.dart' as _i3;
+import 'package:tic_tac_toe_lib/src/API/enums/game_event.dart' as _i3;
 import 'package:tic_tac_toe_lib/tic_tac_toe_lib.dart';
 
 // ignore_for_file: type=lint
@@ -32,7 +32,7 @@ class MockGameObserver extends _i1.Mock implements _i2.GameObserver {
         returnValueForMissingStub: null,
       );
   @override
-  void onGameOver(_i3.GameState? state) => super.noSuchMethod(
+  void onGameOver(_i3.GameEvent? state) => super.noSuchMethod(
         Invocation.method(
           #onGameOver,
           [state],
