@@ -54,4 +54,29 @@ void main() {
       expect(game.toString(), expectedBoard.join('\n'));
     });
   });
+
+  group('Restart', () {
+    late GameImpl game;
+
+    List<String> board = [
+      "x . o",
+      "o x .",
+      ". x .",
+    ];
+
+    setUp(() {
+      game = GameImpl.fromString(board, Mark.o, GameEvent.playing);
+    });
+
+    test('Game restart', () {
+      List<String> expectedBoard = [
+        ". . .",
+        ". . .",
+        ". . .",
+      ];
+
+      game.restart();
+      expect(game.toString(), expectedBoard.join('\n'));
+    });
+  });
 }

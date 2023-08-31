@@ -8,11 +8,11 @@ typedef CharMatrix = List<String>;
 
 class BoardImpl implements Board {
   static const size = 3;
-  final MarkMatrix _board;
+  late MarkMatrix _board;
 
-  BoardImpl()
-      : _board = List.generate(
-            size, (rowIndex) => List.generate(size, (colIndex) => Mark.empty));
+  BoardImpl() {
+    _board = boardInit();
+  }
 
   BoardImpl.fromString(CharMatrix board) : _board = [] {
     for (String line in board) {
@@ -63,7 +63,10 @@ class BoardImpl implements Board {
   }
 
   @override
-  void reset() => _board.clear();
+  void reset() {
+    _board.clear();
+    _board = boardInit();
+  }
 
   @override
   String toString() {
@@ -72,6 +75,11 @@ class BoardImpl implements Board {
             .map((element) => element == Mark.empty ? '.' : element.name)
             .join(' '))
         .join('\n');
+  }
+
+  MarkMatrix boardInit() {
+    return List.generate(
+        size, (rowIndex) => List.generate(size, (colIndex) => Mark.empty));
   }
 
   void placeMark(Position pos, Mark mark) {
