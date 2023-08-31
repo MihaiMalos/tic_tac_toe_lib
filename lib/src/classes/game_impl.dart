@@ -43,7 +43,6 @@ class GameImpl extends GameObservable implements Game {
 
     if (_strategy != null && !_state.isGameOver) {
       // find a way to not duplicate code
-      Future.delayed(Duration(milliseconds: 1500));
       Position computerPos = _strategy!.getComputerPos(_board, _turn);
       _board.placeMark(computerPos, _turn);
       _notifyPlaceMark(computerPos);
