@@ -38,7 +38,7 @@ class GameImpl extends GameObservable implements Game {
     _board.placeMark(pos, _turn);
     _changeTurn();
     _notifyPlaceMark(pos);
-    _changeState(_board.checkWinningMove(pos, _turn));
+    _changeState(_board.checkWinningMove(pos, _turn.opposite));
     if (_state.isGameOver) _notifyGameOver(_state);
 
     if (_strategy != null && !_state.isGameOver) {
@@ -47,7 +47,7 @@ class GameImpl extends GameObservable implements Game {
       _board.placeMark(computerPos, _turn);
       _changeTurn();
       _notifyPlaceMark(computerPos);
-      _changeState(_board.checkWinningMove(computerPos, _turn));
+      _changeState(_board.checkWinningMove(computerPos, _turn.opposite));
       if (_state.isGameOver) _notifyGameOver(_state);
     }
   }
