@@ -4,7 +4,6 @@ import 'package:tic_tac_toe_lib/src/API/enums/game_event.dart';
 import 'package:tic_tac_toe_lib/src/API/enums/mark.dart';
 import 'package:tic_tac_toe_lib/src/API/exceptions/exceptions.dart';
 
-//
 typedef CharMatrix = List<String>;
 
 class BoardImpl implements Board {
