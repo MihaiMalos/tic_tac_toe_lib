@@ -5,7 +5,7 @@ class GameImpl extends GameObservable implements Game {
   final BoardImpl _board;
   Mark _turn;
   GameEvent _state;
-  final GameStrategy? _strategy;
+  GameStrategy? _strategy;
 
   GameImpl({Strategy strategy = Strategy.twoPlayers})
       : _board = BoardImpl(),
@@ -26,9 +26,21 @@ class GameImpl extends GameObservable implements Game {
   int get boardSize => BoardImpl.size;
   @override
   MarkMatrix get boardRepresentation => MarkMatrix.from(_board.configuration);
+  @override
+  GameStrategy? get strategy => _strategy;
+
+  @override
+  set setStrategy(GameStrategy strategy) => _strategy = strategy;
 
   void _changeTurn() => _turn = _turn.opposite;
   void _changeState(GameEvent state) => _state = state;
+
+  @override
+  void restart() {
+    _board.reset();
+    _state = GameEvent.playing;
+    _turn = Mark.x;
+  }
 
   @override
   void placeMark(Position pos) {

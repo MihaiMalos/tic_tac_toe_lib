@@ -8,8 +8,12 @@ abstract class Game {
   Mark get turn;
   int get boardSize;
   MarkMatrix get boardRepresentation;
+  GameStrategy? get strategy;
 
+  set setStrategy(GameStrategy strategy);
   void placeMark(Position pos);
+
+  void restart();
 
   bool addObserver(GameObserver observer);
   bool removeObserver(GameObserver observer);

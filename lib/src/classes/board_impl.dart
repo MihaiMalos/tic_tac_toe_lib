@@ -23,7 +23,6 @@ class BoardImpl implements Board {
 
   @override
   MarkMatrix get configuration => _board;
-
   @override
   Mark getElementByPos(Position pos) => _board[pos.row][pos.col];
   @override
@@ -62,6 +61,9 @@ class BoardImpl implements Board {
     }
     return isFull ? GameEvent.tie : GameEvent.playing;
   }
+
+  @override
+  void reset() => _board.clear();
 
   @override
   String toString() {
