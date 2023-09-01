@@ -70,7 +70,12 @@ class GameImpl extends GameObservable implements Game {
   }
 
   Future<void> makeMove(Position pos, bool isComputerMove) async {
-    if (isComputerMove) await Future.delayed(_computerMoveDuration);
+    if (isComputerMove) {
+      _changeState(GameState.paused);
+      await Future.delayed(_computerMoveDuration);
+      _changeState(GameState.playing);
+    }
+
     _board.placeMark(pos, _turn);
     _changeTurn();
     _notifyPlaceMark(pos, isComputerMove);
