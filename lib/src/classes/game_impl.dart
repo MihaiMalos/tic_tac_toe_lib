@@ -6,19 +6,28 @@ class GameImpl extends GameObservable implements Game {
   Mark _turn;
   GameEvent _state;
   GameStrategy? _strategy;
+  final Duration _computerMoveDuration;
 
-  GameImpl({Strategy strategy = Strategy.twoPlayers})
-      : _board = BoardImpl(),
+  GameImpl({
+    Strategy strategy = Strategy.twoPlayers,
+    Duration computerMoveDuration = const Duration(seconds: 1),
+  })  : _board = BoardImpl(),
         _turn = Mark.x,
         _state = GameEvent.playing,
-        _strategy = strategy.convertToObj;
+        _strategy = strategy.convertToObj,
+        _computerMoveDuration = computerMoveDuration;
 
-  GameImpl.fromString(CharMatrix board, Mark turn, GameEvent state,
-      [Strategy strategy = Strategy.twoPlayers])
-      : _board = BoardImpl.fromString(board),
+  GameImpl.fromString(
+    CharMatrix board,
+    Mark turn,
+    GameEvent state, [
+    Strategy strategy = Strategy.twoPlayers,
+    Duration computerMoveDuration = const Duration(seconds: 1),
+  ])  : _board = BoardImpl.fromString(board),
         _turn = turn,
         _state = state,
-        _strategy = strategy.convertToObj;
+        _strategy = strategy.convertToObj,
+        _computerMoveDuration = computerMoveDuration;
 
   @override
   Mark get turn => _turn;
@@ -47,21 +56,21 @@ class GameImpl extends GameObservable implements Game {
     if (_state.isGameOver) {
       throw GameOverException("Game is over, can't make anymore moves.");
     }
-    _board.placeMark(pos, _turn);
-    _changeTurn();
-    _notifyPlaceMark(pos, false);
-    _changeState(_board.checkWinningMove(pos, _turn.opposite));
-    if (_state.isGameOver) _notifyGameOver(_state);
-
+    makeMove(pos, false);
     if (_strategy != null && !_state.isGameOver) {
       // find a way to not duplicate code
       Position computerPos = _strategy!.getComputerPos(_board, _turn);
-      _board.placeMark(computerPos, _turn);
-      _changeTurn();
-      _notifyPlaceMark(computerPos, true);
-      _changeState(_board.checkWinningMove(computerPos, _turn.opposite));
-      if (_state.isGameOver) _notifyGameOver(_state);
+      makeMove(computerPos, true);
     }
+  }
+
+  void makeMove(Position pos, bool isComputerMove) async {
+    if (isComputerMove) await Future.delayed(_computerMoveDuration);
+    _board.placeMark(pos, _turn);
+    _changeTurn();
+    _notifyPlaceMark(pos, isComputerMove);
+    _changeState(_board.checkWinningMove(pos, _turn.opposite));
+    if (_state.isGameOver) _notifyGameOver(_state);
   }
 
   @override
