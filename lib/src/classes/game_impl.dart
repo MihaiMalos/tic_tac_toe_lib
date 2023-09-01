@@ -49,7 +49,7 @@ class GameImpl extends GameObservable implements Game {
     }
     _board.placeMark(pos, _turn);
     _changeTurn();
-    _notifyPlaceMark(pos);
+    _notifyPlaceMark(pos, false);
     _changeState(_board.checkWinningMove(pos, _turn.opposite));
     if (_state.isGameOver) _notifyGameOver(_state);
 
@@ -58,7 +58,7 @@ class GameImpl extends GameObservable implements Game {
       Position computerPos = _strategy!.getComputerPos(_board, _turn);
       _board.placeMark(computerPos, _turn);
       _changeTurn();
-      _notifyPlaceMark(computerPos);
+      _notifyPlaceMark(computerPos, true);
       _changeState(_board.checkWinningMove(computerPos, _turn.opposite));
       if (_state.isGameOver) _notifyGameOver(_state);
     }
@@ -83,9 +83,9 @@ class GameObservable {
     return _observers.remove(observer);
   }
 
-  void _notifyPlaceMark(Position pos) {
+  void _notifyPlaceMark(Position pos, bool isComputerMove) {
     for (var observer in _observers) {
-      observer.onPlaceMark(pos);
+      observer.onPlaceMark(pos, isComputerMove);
     }
   }
 

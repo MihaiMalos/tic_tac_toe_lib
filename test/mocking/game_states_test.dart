@@ -18,7 +18,7 @@ void main() {
       PositionList positions = [Position(0, 0), Position(0, 1)];
       for (var position in positions) {
         game.placeMark(position);
-        verify(observer.onPlaceMark(position));
+        verify(observer.onPlaceMark(position, false));
       }
     });
 
@@ -33,7 +33,7 @@ void main() {
 
       for (var position in positions) {
         game.placeMark(position);
-        verify(observer.onPlaceMark(position));
+        verify(observer.onPlaceMark(position, false));
       }
 
       verify(observer.onGameOver(GameEvent.xWon));
@@ -51,7 +51,7 @@ void main() {
 
       for (var position in positions) {
         game.placeMark(position);
-        verify(observer.onPlaceMark(position));
+        verify(observer.onPlaceMark(position, false));
       }
       verify(observer.onGameOver(GameEvent.oWon));
     });
@@ -71,7 +71,7 @@ void main() {
 
       for (var position in positions) {
         game.placeMark(position);
-        verify(observer.onPlaceMark(position));
+        verify(observer.onPlaceMark(position, false));
       }
       verify(observer.onGameOver(GameEvent.tie));
     });
