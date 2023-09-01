@@ -1,8 +1,5 @@
-import 'package:tic_tac_toe_lib/src/API/classes/board.dart';
-import 'package:tic_tac_toe_lib/src/API/classes/position.dart';
-import 'package:tic_tac_toe_lib/src/API/enums/game_event.dart';
-import 'package:tic_tac_toe_lib/src/API/enums/mark.dart';
-import 'package:tic_tac_toe_lib/src/API/exceptions/exceptions.dart';
+import 'package:tic_tac_toe_lib/src/internals/enums/game_state.dart';
+import 'package:tic_tac_toe_lib/tic_tac_toe_lib.dart';
 
 typedef CharMatrix = List<String>;
 
@@ -50,16 +47,16 @@ class BoardImpl implements Board {
   }
 
   @override
-  GameEvent checkWinning(Mark mark) {
+  GameEvent? checkWinning(Mark mark) {
     for (int index = 0; index < size; index++) {
       if (checkRow(index, mark) || checkColumn(index, mark)) {
-        return mark.toGameState;
+        return mark == Mark.x ? GameEvent.xWon : GameEvent.oWon;
       }
     }
     if (checkPrimaryDiagonal(mark) || checkSecondaryDiagonal(mark)) {
-      return mark.toGameState;
+      return mark == Mark.x ? GameEvent.xWon : GameEvent.oWon;
     }
-    return isFull ? GameEvent.tie : GameEvent.playing;
+    return isFull ? GameEvent.draw : null;
   }
 
   @override
@@ -89,15 +86,15 @@ class BoardImpl implements Board {
 
   bool isEmptyPos(int row, int col) => getElementByPair(row, col).isEmpty;
 
-  GameEvent checkWinningMove(Position pos, Mark mark) {
+  GameState checkWinningMove(Position pos, Mark mark) {
     if (checkRow(pos.row, mark) ||
         checkColumn(pos.col, mark) ||
         checkPrimaryDiagonal(mark) ||
         checkSecondaryDiagonal(mark)) {
-      return mark.toGameState;
+      return mark == Mark.x ? GameState.xWon : GameState.oWon;
     }
 
-    return isFull ? GameEvent.tie : GameEvent.playing;
+    return isFull ? GameState.draw : GameState.playing;
   }
 
   void validatePosition(Position pos) {

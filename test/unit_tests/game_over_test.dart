@@ -1,5 +1,6 @@
 import 'package:test/test.dart';
-import 'package:tic_tac_toe_lib/src/classes/game_impl.dart';
+import 'package:tic_tac_toe_lib/src/internals/classes/game_impl.dart';
+import 'package:tic_tac_toe_lib/src/internals/enums/game_state.dart';
 import 'package:tic_tac_toe_lib/tic_tac_toe_lib.dart';
 
 void main() {
@@ -11,7 +12,7 @@ void main() {
       ". . .",
     ];
     setUp(() {
-      game = GameImpl.fromString(board, Mark.x, GameEvent.playing);
+      game = GameImpl.fromString(board, Mark.x, GameState.playing);
     });
 
     test('First row', () {
@@ -54,7 +55,7 @@ void main() {
       ". . .",
     ];
     setUp(() {
-      game = GameImpl.fromString(board, Mark.x, GameEvent.playing);
+      game = GameImpl.fromString(board, Mark.x, GameState.playing);
     });
 
     test('First column', () {
@@ -96,7 +97,7 @@ void main() {
       "x . x",
     ];
     setUp(() {
-      game = GameImpl.fromString(board, Mark.x, GameEvent.playing);
+      game = GameImpl.fromString(board, Mark.x, GameState.playing);
     });
 
     test('Primary diagonal', () {

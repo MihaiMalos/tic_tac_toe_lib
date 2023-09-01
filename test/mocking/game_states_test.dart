@@ -73,7 +73,7 @@ void main() {
         game.placeMark(position);
         verify(observer.onPlaceMark(position, false));
       }
-      verify(observer.onGameOver(GameEvent.tie));
+      verify(observer.onGameOver(GameEvent.draw));
     });
   });
 }

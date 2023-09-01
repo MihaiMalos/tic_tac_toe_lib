@@ -1,4 +1,4 @@
-import 'package:tic_tac_toe_lib/src/classes/game_impl.dart';
+import 'package:tic_tac_toe_lib/src/internals/classes/game_impl.dart';
 import 'package:tic_tac_toe_lib/tic_tac_toe_lib.dart';
 
 abstract class Game {
@@ -11,7 +11,7 @@ abstract class Game {
   GameStrategy? get strategy;
 
   set setStrategy(GameStrategy strategy);
-  void placeMark(Position pos);
+  Future<void> placeMark(Position pos);
 
   void restart();
 

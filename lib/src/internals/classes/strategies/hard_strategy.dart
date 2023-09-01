@@ -32,17 +32,17 @@ class HardStrategy implements GameStrategy {
 
   Map scores = {
     GameEvent.oWon: 1.0,
-    GameEvent.tie: 0.0,
+    GameEvent.draw: 0.0,
     GameEvent.xWon: -1.0,
   };
 
   double minimax(
       Board board, Mark mark, double alpha, double beta, bool isMaximizing) {
-    GameEvent result;
+    GameEvent? result;
     isMaximizing
         ? result = board.checkWinning(mark.opposite)
         : result = board.checkWinning(mark);
-    if (result.isGameOver) return scores[result];
+    if (result != null) return scores[result];
 
     double bestScore = isMaximizing ? double.negativeInfinity : double.infinity;
     final markToFill = isMaximizing ? mark : mark.opposite;

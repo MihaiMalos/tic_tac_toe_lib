@@ -1,4 +1,5 @@
-import 'package:tic_tac_toe_lib/src/classes/game_impl.dart';
+import 'package:tic_tac_toe_lib/src/internals/classes/game_impl.dart';
+import 'package:tic_tac_toe_lib/src/internals/enums/game_state.dart';
 import 'package:tic_tac_toe_lib/tic_tac_toe_lib.dart';
 import 'package:test/test.dart';
 
@@ -32,7 +33,7 @@ void main() {
       ". x .",
     ];
     setUp(() {
-      game = GameImpl.fromString(board, Mark.o, GameEvent.playing);
+      game = GameImpl.fromString(board, Mark.o, GameState.playing);
     });
 
     test('Board init', () {
@@ -65,7 +66,7 @@ void main() {
     ];
 
     setUp(() {
-      game = GameImpl.fromString(board, Mark.o, GameEvent.playing);
+      game = GameImpl.fromString(board, Mark.o, GameState.playing);
     });
 
     test('Game restart', () {

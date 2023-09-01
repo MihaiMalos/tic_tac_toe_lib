@@ -1,10 +1,11 @@
-import 'package:tic_tac_toe_lib/src/classes/board_impl.dart';
+import 'package:tic_tac_toe_lib/src/internals/classes/board_impl.dart';
+import 'package:tic_tac_toe_lib/src/internals/enums/game_state.dart';
 import 'package:tic_tac_toe_lib/tic_tac_toe_lib.dart';
 
 class GameImpl extends GameObservable implements Game {
   final BoardImpl _board;
   Mark _turn;
-  GameEvent _state;
+  GameState _state;
   GameStrategy? _strategy;
   final Duration _computerMoveDuration;
 
@@ -13,14 +14,14 @@ class GameImpl extends GameObservable implements Game {
     Duration computerMoveDuration = const Duration(seconds: 1),
   })  : _board = BoardImpl(),
         _turn = Mark.x,
-        _state = GameEvent.playing,
+        _state = GameState.playing,
         _strategy = strategy.convertToObj,
         _computerMoveDuration = computerMoveDuration;
 
   GameImpl.fromString(
     CharMatrix board,
     Mark turn,
-    GameEvent state, [
+    GameState state, [
     Strategy strategy = Strategy.twoPlayers,
     Duration computerMoveDuration = const Duration(seconds: 1),
   ])  : _board = BoardImpl.fromString(board),
@@ -42,35 +43,42 @@ class GameImpl extends GameObservable implements Game {
   set setStrategy(GameStrategy strategy) => _strategy = strategy;
 
   void _changeTurn() => _turn = _turn.opposite;
-  void _changeState(GameEvent state) => _state = state;
+  void _changeState(GameState state) => _state = state;
 
   @override
   void restart() {
     _board.reset();
-    _state = GameEvent.playing;
+    _state = GameState.playing;
     _turn = Mark.x;
   }
 
   @override
-  void placeMark(Position pos) {
+  Future<void> placeMark(Position pos) async {
     if (_state.isGameOver) {
       throw GameOverException("Game is over, can't make anymore moves.");
     }
-    makeMove(pos, false);
+    await makeMove(pos, false);
     if (_strategy != null && !_state.isGameOver) {
       // find a way to not duplicate code
       Position computerPos = _strategy!.getComputerPos(_board, _turn);
-      makeMove(computerPos, true);
+      await makeMove(computerPos, true);
     }
   }
 
-  void makeMove(Position pos, bool isComputerMove) async {
+  Future<void> makeMove(Position pos, bool isComputerMove) async {
     if (isComputerMove) await Future.delayed(_computerMoveDuration);
     _board.placeMark(pos, _turn);
     _changeTurn();
     _notifyPlaceMark(pos, isComputerMove);
     _changeState(_board.checkWinningMove(pos, _turn.opposite));
-    if (_state.isGameOver) _notifyGameOver(_state);
+
+    if (_state.isXWinner) {
+      _notifyGameOver(GameEvent.xWon);
+    } else if (_state.isOWinner) {
+      _notifyGameOver(GameEvent.oWon);
+    } else if (_state.isDraw) {
+      _notifyGameOver(GameEvent.draw);
+    }
   }
 
   @override

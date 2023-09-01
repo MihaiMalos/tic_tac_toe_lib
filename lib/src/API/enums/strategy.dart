@@ -1,7 +1,7 @@
 import 'package:tic_tac_toe_lib/src/API/classes/game_strategy.dart';
-import 'package:tic_tac_toe_lib/src/classes/strategies/easy_strategy.dart';
-import 'package:tic_tac_toe_lib/src/classes/strategies/hard_strategy.dart';
-import 'package:tic_tac_toe_lib/src/classes/strategies/medium_strategy.dart';
+import 'package:tic_tac_toe_lib/src/internals/classes/strategies/easy_strategy.dart';
+import 'package:tic_tac_toe_lib/src/internals/classes/strategies/hard_strategy.dart';
+import 'package:tic_tac_toe_lib/src/internals/classes/strategies/medium_strategy.dart';
 
 enum Strategy {
   easy,
