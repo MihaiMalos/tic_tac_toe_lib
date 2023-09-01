@@ -57,6 +57,10 @@ class GameImpl extends GameObservable implements Game {
     if (_state.isGameOver) {
       throw GameOverException("Game is over, can't make anymore moves.");
     }
+    if (_state.isPaused) {
+      throw WaitingMoveException(
+          "There is already a move in progress. Wait for it ti finish.");
+    }
     await makeMove(pos, false);
     if (_strategy != null && !_state.isGameOver) {
       // find a way to not duplicate code
