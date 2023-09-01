@@ -11,7 +11,7 @@ void main() {
     await game.placeMark(Position(0, 2));
     await game.placeMark(Position(1, 0));
 
-    // expect(() => game.placeMark(Position(0, 0)),
-    //     throwsA(isA<GameOverException>()));
+    expect(() => game.placeMark(Position(0, 0)),
+        throwsA(isA<GameOverException>()));
   });
 }

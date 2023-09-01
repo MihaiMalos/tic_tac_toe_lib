@@ -2,7 +2,10 @@ import 'package:tic_tac_toe_lib/src/internals/classes/game_impl.dart';
 import 'package:tic_tac_toe_lib/tic_tac_toe_lib.dart';
 
 abstract class Game {
-  factory Game.create({Strategy strategy = Strategy.twoPlayers}) =>
+  factory Game.create({
+    Strategy strategy = Strategy.twoPlayers,
+    Duration computerMoveDuration = const Duration(seconds: 1),
+  }) =>
       GameImpl(strategy: strategy);
 
   Mark get turn;
