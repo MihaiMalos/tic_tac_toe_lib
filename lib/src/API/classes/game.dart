@@ -6,7 +6,7 @@ abstract class Game {
     Strategy strategy = Strategy.twoPlayers,
     Duration computerMoveDuration = const Duration(seconds: 1),
   }) =>
-      GameImpl(strategy: strategy);
+      GameImpl(strategy: strategy, computerMoveDuration: computerMoveDuration);
 
   Mark get turn;
   int get boardSize;
