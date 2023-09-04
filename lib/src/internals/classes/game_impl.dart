@@ -1,22 +1,30 @@
 import 'package:tic_tac_toe_lib/src/internals/classes/board_impl.dart';
+import 'package:tic_tac_toe_lib/src/internals/classes/game_timer.dart';
 import 'package:tic_tac_toe_lib/src/internals/enums/game_state.dart';
+import 'package:tic_tac_toe_lib/src/internals/interfaces/timer_observer.dart';
 import 'package:tic_tac_toe_lib/tic_tac_toe_lib.dart';
 
-class GameImpl extends GameObservable implements Game {
+class GameImpl extends GameObservable implements Game, TimerObserver {
   final BoardImpl _board;
   Mark _turn;
   GameState _state;
   GameStrategy? _strategy;
+  final GameTimer _timer;
   final Duration _computerMoveDuration;
 
   GameImpl({
-    Strategy strategy = Strategy.twoPlayers,
-    Duration computerMoveDuration = const Duration(seconds: 1),
+    required Strategy strategy,
+    required Duration computerMoveDuration,
+    required Duration moveDuration,
   })  : _board = BoardImpl(),
         _turn = Mark.x,
         _state = GameState.playing,
         _strategy = strategy.convertToObj,
-        _computerMoveDuration = computerMoveDuration;
+        _computerMoveDuration = computerMoveDuration,
+        _timer = GameTimer(moveDuration: moveDuration) {
+    _timer.addObserver(this);
+    _timer.start();
+  }
 
   GameImpl.fromString(
     CharMatrix board,
@@ -24,11 +32,16 @@ class GameImpl extends GameObservable implements Game {
     GameState state, [
     Strategy strategy = Strategy.twoPlayers,
     Duration computerMoveDuration = const Duration(seconds: 1),
+    Duration moveDuration = const Duration(seconds: 5),
   ])  : _board = BoardImpl.fromString(board),
         _turn = turn,
         _state = state,
         _strategy = strategy.convertToObj,
-        _computerMoveDuration = computerMoveDuration;
+        _computerMoveDuration = computerMoveDuration,
+        _timer = GameTimer(moveDuration: moveDuration) {
+    _timer.addObserver(this);
+    _timer.start();
+  }
 
   @override
   Mark get turn => _turn;
@@ -62,10 +75,12 @@ class GameImpl extends GameObservable implements Game {
           "There is already a move in progress. Wait for it ti finish.");
     }
     await makeMove(pos, false);
+    _timer.restart();
     if (_strategy != null && !_state.isGameOver) {
       // find a way to not duplicate code
       Position computerPos = _strategy!.getComputerPos(_board, _turn);
       await makeMove(computerPos, true);
+      _timer.restart();
     }
   }
 
@@ -92,6 +107,18 @@ class GameImpl extends GameObservable implements Game {
 
   @override
   String toString() => _board.toString();
+
+  @override
+  void onTimerEnd() {
+    if (_state.isGameOver) return;
+    GameState winnerState = _turn == Mark.x ? GameState.oWon : GameState.xWon;
+    GameEvent winnerEvent = _turn == Mark.x ? GameEvent.oWon : GameEvent.xWon;
+    _changeState(winnerState);
+    _notifyGameOver(winnerEvent);
+  }
+
+  @override
+  void onTimerTick(Duration duration) {}
 }
 
 class GameObservable {
