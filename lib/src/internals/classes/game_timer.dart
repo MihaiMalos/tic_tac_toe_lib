@@ -11,18 +11,20 @@ class GameTimer extends TimerObserverable {
     _countdownTimer = CountdownTimer(_moveDuration, Duration(milliseconds: 10));
     var timerListener = _countdownTimer.listen(null);
     timerListener.onData((event) {
-      _notifyTimerTick(event.remaining);
+      if (event.remaining >= Duration.zero) _notifyTimerTick(event.remaining);
     });
     timerListener.onDone(() {
-      _notifyTimerEnd();
+      if (_countdownTimer.elapsed >= _moveDuration) _notifyTimerEnd();
       _countdownTimer.cancel();
     });
   }
 
   void restart() {
     _countdownTimer.cancel();
-    _countdownTimer = CountdownTimer(_moveDuration, Duration(milliseconds: 10));
+    start();
   }
+
+  void stop() => _countdownTimer.cancel();
 }
 
 class TimerObserverable {

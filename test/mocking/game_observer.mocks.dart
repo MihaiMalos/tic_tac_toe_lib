@@ -37,7 +37,7 @@ class MockGameObserver extends _i1.Mock implements _i2.GameObserver {
         returnValueForMissingStub: null,
       );
   @override
-  void onGameOver(_i2.GameEvent? state) => super.noSuchMethod(
+  void onGameOver(_i2.GameStatus? state) => super.noSuchMethod(
         Invocation.method(
           #onGameOver,
           [state],

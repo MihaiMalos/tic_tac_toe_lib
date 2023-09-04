@@ -47,16 +47,16 @@ class BoardImpl implements Board {
   }
 
   @override
-  GameEvent? checkWinning(Mark mark) {
+  GameStatus? checkWinning(Mark mark) {
     for (int index = 0; index < size; index++) {
       if (checkRow(index, mark) || checkColumn(index, mark)) {
-        return mark == Mark.x ? GameEvent.xWon : GameEvent.oWon;
+        return mark == Mark.x ? GameStatus.xWon : GameStatus.oWon;
       }
     }
     if (checkPrimaryDiagonal(mark) || checkSecondaryDiagonal(mark)) {
-      return mark == Mark.x ? GameEvent.xWon : GameEvent.oWon;
+      return mark == Mark.x ? GameStatus.xWon : GameStatus.oWon;
     }
-    return isFull ? GameEvent.draw : null;
+    return isFull ? GameStatus.draw : null;
   }
 
   @override

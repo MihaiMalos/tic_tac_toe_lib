@@ -97,22 +97,35 @@ class GameImpl extends GameObservable implements Game, TimerObserver {
     _changeState(_board.checkWinningMove(pos, _turn.opposite));
 
     if (_state.isXWinner) {
-      _notifyGameOver(GameEvent.xWon);
+      _notifyGameOver(GameStatus.xWon);
     } else if (_state.isOWinner) {
-      _notifyGameOver(GameEvent.oWon);
+      _notifyGameOver(GameStatus.oWon);
     } else if (_state.isDraw) {
-      _notifyGameOver(GameEvent.draw);
+      _notifyGameOver(GameStatus.draw);
     }
   }
 
   @override
   String toString() => _board.toString();
 
+  void _notifyPlaceMark(Position pos, bool isComputerMove) {
+    for (var observer in _observers) {
+      observer.onPlaceMark(pos, isComputerMove);
+    }
+  }
+
+  void _notifyGameOver(GameStatus state) {
+    for (var observer in _observers) {
+      observer.onGameOver(state);
+    }
+  }
+
   @override
   void onTimerEnd() {
     if (_state.isGameOver) return;
     GameState winnerState = _turn == Mark.x ? GameState.oWon : GameState.xWon;
-    GameEvent winnerEvent = _turn == Mark.x ? GameEvent.oWon : GameEvent.xWon;
+    GameStatus winnerEvent =
+        _turn == Mark.x ? GameStatus.oWon : GameStatus.xWon;
     _changeState(winnerState);
     _notifyGameOver(winnerEvent);
   }
@@ -134,17 +147,5 @@ class GameObservable {
 
   bool removeObserver(GameObserver observer) {
     return _observers.remove(observer);
-  }
-
-  void _notifyPlaceMark(Position pos, bool isComputerMove) {
-    for (var observer in _observers) {
-      observer.onPlaceMark(pos, isComputerMove);
-    }
-  }
-
-  void _notifyGameOver(GameEvent state) {
-    for (var observer in _observers) {
-      observer.onGameOver(state);
-    }
   }
 }

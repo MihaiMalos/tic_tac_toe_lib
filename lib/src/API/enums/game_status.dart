@@ -1,4 +1,4 @@
-enum GameEvent {
+enum GameStatus {
   xWon,
   oWon,
   draw;

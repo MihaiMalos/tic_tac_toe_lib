@@ -11,5 +11,5 @@ abstract interface class Board {
 
   void reset();
 
-  GameEvent? checkWinning(Mark mark);
+  GameStatus? checkWinning(Mark mark);
 }

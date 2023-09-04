@@ -36,7 +36,7 @@ void main() {
         verify(observer.onPlaceMark(position, false));
       }
 
-      verify(observer.onGameOver(GameEvent.xWon));
+      verify(observer.onGameOver(GameStatus.xWon));
     });
 
     test('O wins', () {
@@ -53,7 +53,7 @@ void main() {
         game.placeMark(position);
         verify(observer.onPlaceMark(position, false));
       }
-      verify(observer.onGameOver(GameEvent.oWon));
+      verify(observer.onGameOver(GameStatus.oWon));
     });
 
     test('Tie', () {
@@ -73,7 +73,7 @@ void main() {
         game.placeMark(position);
         verify(observer.onPlaceMark(position, false));
       }
-      verify(observer.onGameOver(GameEvent.draw));
+      verify(observer.onGameOver(GameStatus.draw));
     });
   });
 }
