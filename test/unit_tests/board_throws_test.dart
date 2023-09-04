@@ -3,6 +3,8 @@ import 'package:test/test.dart';
 import 'package:tic_tac_toe_lib/tic_tac_toe_lib.dart';
 
 void main() {
+  // comment
+
   group('Exception throws', () {
     late BoardImpl game;
     List<String> board = [
