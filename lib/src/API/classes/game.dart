@@ -17,6 +17,10 @@ abstract class Game {
   MarkMatrix get boardRepresentation;
   GameStrategy? get strategy;
 
+  void startTimer();
+  void stopTimer();
+  Duration get timerDuration;
+
   set setStrategy(GameStrategy? strategy);
   Future<void> placeMark(Position pos);
 

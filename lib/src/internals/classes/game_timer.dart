@@ -25,6 +25,8 @@ class GameTimer extends TimerObserverable {
   }
 
   void stop() => _countdownTimer.cancel();
+  Duration get timeElapsed => _countdownTimer.elapsed;
+  Duration get timerDuration => _moveDuration;
 }
 
 class TimerObserverable {

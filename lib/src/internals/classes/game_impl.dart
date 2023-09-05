@@ -23,7 +23,6 @@ class GameImpl extends GameObservable implements Game, TimerObserver {
         _computerMoveDuration = computerMoveDuration,
         _timer = GameTimer(moveDuration: moveDuration) {
     _timer.addObserver(this);
-    _timer.start();
   }
 
   GameImpl.fromString(
@@ -40,7 +39,6 @@ class GameImpl extends GameObservable implements Game, TimerObserver {
         _computerMoveDuration = computerMoveDuration,
         _timer = GameTimer(moveDuration: moveDuration) {
     _timer.addObserver(this);
-    _timer.start();
   }
 
   @override
@@ -59,10 +57,18 @@ class GameImpl extends GameObservable implements Game, TimerObserver {
   void _changeState(GameState state) => _state = state;
 
   @override
+  void startTimer() => _timer.start();
+  @override
+  void stopTimer() => _timer.stop();
+  @override
+  Duration get timerDuration => _timer.timerDuration;
+
+  @override
   void restart() {
     _board.reset();
     _state = GameState.playing;
     _turn = Mark.x;
+    _timer.restart();
   }
 
   @override
@@ -75,12 +81,12 @@ class GameImpl extends GameObservable implements Game, TimerObserver {
           "There is already a move in progress. Wait for it ti finish.");
     }
     await makeMove(pos, false);
-    _timer.restart();
+    if (!_state.isGameOver) _timer.restart();
     if (_strategy != null && !_state.isGameOver) {
       // find a way to not duplicate code
       Position computerPos = _strategy!.getComputerPos(_board, _turn);
       await makeMove(computerPos, true);
-      _timer.restart();
+      if (!_state.isGameOver) _timer.restart();
     }
   }
 
@@ -115,8 +121,15 @@ class GameImpl extends GameObservable implements Game, TimerObserver {
   }
 
   void _notifyGameOver(GameStatus state) {
+    _timer.stop();
     for (var observer in _observers) {
       observer.onGameOver(state);
+    }
+  }
+
+  void _notifyTimerTick(Duration remainingTime) {
+    for (var observer in _observers) {
+      observer.onTimerTick(remainingTime);
     }
   }
 
@@ -131,7 +144,9 @@ class GameImpl extends GameObservable implements Game, TimerObserver {
   }
 
   @override
-  void onTimerTick(Duration duration) {}
+  void onTimerTick(Duration remainingTime) {
+    _notifyTimerTick(remainingTime);
+  }
 }
 
 class GameObservable {
