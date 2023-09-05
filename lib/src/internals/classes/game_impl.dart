@@ -23,7 +23,7 @@ class GameImpl extends GameObservable implements Game, TimerObserver {
   })  : _board = BoardImpl(),
         _turn = Mark.x,
         _state = GameState.playing,
-        _strategy = strategy.convertToObj,
+        _strategy = convertToStrategyObj(strategy),
         _timer = GameTimer(
           moveDuration: timerMoveDuration,
           resolution: timerResolution,
@@ -41,7 +41,7 @@ class GameImpl extends GameObservable implements Game, TimerObserver {
   ])  : _board = BoardImpl.fromString(board),
         _turn = turn,
         _state = state,
-        _strategy = strategy.convertToObj,
+        _strategy = convertToStrategyObj(strategy),
         _timer = GameTimer(
           moveDuration: timerMoveDuration,
           resolution: timerResolution,
@@ -56,10 +56,10 @@ class GameImpl extends GameObservable implements Game, TimerObserver {
   @override
   MarkMatrix get boardRepresentation => MarkMatrix.from(_board.configuration);
   @override
-  GameStrategy? get strategy => _strategy;
+  Strategy get strategy => convertToStrategyEnum(_strategy);
 
   @override
-  set setStrategy(GameStrategy? strategy) => _strategy = strategy;
+  set strategy(Strategy strategy) => _strategy = convertToStrategyObj(strategy);
 
   void _changeTurn() => _turn = _turn.opposite;
   void _changeState(GameState state) => _state = state;
@@ -70,6 +70,8 @@ class GameImpl extends GameObservable implements Game, TimerObserver {
   void stopTimer() => _timer.stop();
   @override
   Duration get timerDuration => _timer.timerDuration;
+  @override
+  Duration get timerElapsedTime => _timer.timeElapsed;
 
   @override
   void restart() {
@@ -119,7 +121,7 @@ class GameImpl extends GameObservable implements Game, TimerObserver {
     }
   }
 
-  Duration strategyToDuration(GameStrategy? strategy) {
+  static Duration strategyToDuration(GameStrategy? strategy) {
     if (strategy is EasyStrategy) {
       return Duration(milliseconds: Random().nextInt(100) + 400);
     } else if (strategy is MediumStrategy) {
@@ -128,6 +130,30 @@ class GameImpl extends GameObservable implements Game, TimerObserver {
       return Duration(milliseconds: Random().nextInt(1000) + 1000);
     }
     return Duration.zero;
+  }
+
+  static GameStrategy? convertToStrategyObj(Strategy strategy) {
+    switch (strategy) {
+      case Strategy.easy:
+        return EasyStrategy();
+      case Strategy.medium:
+        return MediumStrategy();
+      case Strategy.hard:
+        return HardStrategy();
+      case Strategy.twoPlayers:
+        return null;
+    }
+  }
+
+  static Strategy convertToStrategyEnum(GameStrategy? strategy) {
+    if (strategy is EasyStrategy) {
+      return Strategy.easy;
+    } else if (strategy is MediumStrategy) {
+      return Strategy.medium;
+    } else if (strategy is HardStrategy) {
+      return Strategy.hard;
+    }
+    return Strategy.twoPlayers;
   }
 
   @override

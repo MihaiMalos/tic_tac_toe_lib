@@ -16,13 +16,14 @@ abstract class Game {
   Mark get turn;
   int get boardSize;
   MarkMatrix get boardRepresentation;
-  GameStrategy? get strategy;
+  Strategy get strategy;
 
   void startTimer();
   void stopTimer();
   Duration get timerDuration;
+  Duration get timerElapsedTime;
 
-  set setStrategy(GameStrategy? strategy);
+  set strategy(Strategy strategy);
   Future<void> placeMark(Position pos);
 
   void restart();
