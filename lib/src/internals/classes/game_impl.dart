@@ -19,11 +19,15 @@ class GameImpl extends GameObservable implements Game, TimerObserver {
   GameImpl({
     required Strategy strategy,
     required Duration timerMoveDuration,
+    required Duration timerResolution,
   })  : _board = BoardImpl(),
         _turn = Mark.x,
         _state = GameState.playing,
         _strategy = strategy.convertToObj,
-        _timer = GameTimer(moveDuration: timerMoveDuration) {
+        _timer = GameTimer(
+          moveDuration: timerMoveDuration,
+          resolution: timerResolution,
+        ) {
     _timer.addObserver(this);
   }
 
@@ -33,11 +37,15 @@ class GameImpl extends GameObservable implements Game, TimerObserver {
     GameState state, [
     Strategy strategy = Strategy.twoPlayers,
     Duration timerMoveDuration = const Duration(seconds: 5),
+    Duration timerResolution = const Duration(milliseconds: 10),
   ])  : _board = BoardImpl.fromString(board),
         _turn = turn,
         _state = state,
         _strategy = strategy.convertToObj,
-        _timer = GameTimer(moveDuration: timerMoveDuration) {
+        _timer = GameTimer(
+          moveDuration: timerMoveDuration,
+          resolution: timerResolution,
+        ) {
     _timer.addObserver(this);
   }
 
@@ -145,18 +153,18 @@ class GameImpl extends GameObservable implements Game, TimerObserver {
   }
 
   @override
-  void onTimerEnd() {
-    if (_state.isGameOver) return;
-    GameState winnerState = _turn == Mark.x ? GameState.oWon : GameState.xWon;
-    GameStatus winnerEvent =
-        _turn == Mark.x ? GameStatus.oWon : GameStatus.xWon;
-    _changeState(winnerState);
-    _notifyGameOver(winnerEvent);
+  void onTimerTick(Duration remainingTime) {
+    _notifyTimerTick(remainingTime);
   }
 
   @override
-  void onTimerTick(Duration remainingTime) {
-    _notifyTimerTick(remainingTime);
+  void onTimerEnd() {
+    if (_state.isGameOver) return;
+    GameState winnerState = _turn == Mark.x ? GameState.oWon : GameState.xWon;
+    GameStatus winnerStatus =
+        _turn == Mark.x ? GameStatus.oWon : GameStatus.xWon;
+    _changeState(winnerState);
+    _notifyGameOver(winnerStatus);
   }
 }
 

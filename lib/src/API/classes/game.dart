@@ -5,10 +5,12 @@ abstract class Game {
   factory Game.create({
     Strategy strategy = Strategy.twoPlayers,
     Duration timerMoveDuration = const Duration(seconds: 5),
+    Duration timerResolution = const Duration(milliseconds: 10),
   }) =>
       GameImpl(
         strategy: strategy,
         timerMoveDuration: timerMoveDuration,
+        timerResolution: timerResolution,
       );
 
   Mark get turn;

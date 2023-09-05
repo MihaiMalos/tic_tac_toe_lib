@@ -4,17 +4,22 @@ import 'package:tic_tac_toe_lib/src/internals/interfaces/timer_observer.dart';
 class GameTimer extends TimerObserverable {
   late CountdownTimer _countdownTimer;
   final Duration _moveDuration;
+  final Duration _resolution;
 
-  GameTimer({required Duration moveDuration}) : _moveDuration = moveDuration;
+  GameTimer({required Duration moveDuration, required Duration resolution})
+      : _moveDuration = moveDuration,
+        _resolution = resolution;
 
   void start() {
-    _countdownTimer = CountdownTimer(_moveDuration, Duration(milliseconds: 10));
+    _countdownTimer = CountdownTimer(_moveDuration, _resolution);
     var timerListener = _countdownTimer.listen(null);
     timerListener.onData((event) {
-      if (event.remaining >= Duration.zero) _notifyTimerTick(event.remaining);
+      if (!_countdownTimer.remaining.isNegative) {
+        _notifyTimerTick(event.remaining);
+      }
     });
     timerListener.onDone(() {
-      if (_countdownTimer.elapsed >= _moveDuration) _notifyTimerEnd();
+      if (_countdownTimer.remaining.isNegative) _notifyTimerEnd();
       _countdownTimer.cancel();
     });
   }
