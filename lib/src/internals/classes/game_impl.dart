@@ -53,7 +53,7 @@ class GameImpl extends GameObservable implements Game, TimerObserver {
   GameStrategy? get strategy => _strategy;
 
   @override
-  set setStrategy(GameStrategy strategy) => _strategy = strategy;
+  set setStrategy(GameStrategy? strategy) => _strategy = strategy;
 
   void _changeTurn() => _turn = _turn.opposite;
   void _changeState(GameState state) => _state = state;
