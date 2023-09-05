@@ -1,5 +1,10 @@
+import 'dart:math';
+
 import 'package:tic_tac_toe_lib/src/internals/classes/board_impl.dart';
 import 'package:tic_tac_toe_lib/src/internals/classes/game_timer.dart';
+import 'package:tic_tac_toe_lib/src/internals/classes/strategies/easy_strategy.dart';
+import 'package:tic_tac_toe_lib/src/internals/classes/strategies/hard_strategy.dart';
+import 'package:tic_tac_toe_lib/src/internals/classes/strategies/medium_strategy.dart';
 import 'package:tic_tac_toe_lib/src/internals/enums/game_state.dart';
 import 'package:tic_tac_toe_lib/src/internals/interfaces/timer_observer.dart';
 import 'package:tic_tac_toe_lib/tic_tac_toe_lib.dart';
@@ -10,18 +15,15 @@ class GameImpl extends GameObservable implements Game, TimerObserver {
   GameState _state;
   GameStrategy? _strategy;
   final GameTimer _timer;
-  final Duration _computerMoveDuration;
 
   GameImpl({
     required Strategy strategy,
-    required Duration computerMoveDuration,
-    required Duration moveDuration,
+    required Duration timerMoveDuration,
   })  : _board = BoardImpl(),
         _turn = Mark.x,
         _state = GameState.playing,
         _strategy = strategy.convertToObj,
-        _computerMoveDuration = computerMoveDuration,
-        _timer = GameTimer(moveDuration: moveDuration) {
+        _timer = GameTimer(moveDuration: timerMoveDuration) {
     _timer.addObserver(this);
   }
 
@@ -30,14 +32,12 @@ class GameImpl extends GameObservable implements Game, TimerObserver {
     Mark turn,
     GameState state, [
     Strategy strategy = Strategy.twoPlayers,
-    Duration computerMoveDuration = const Duration(seconds: 1),
-    Duration moveDuration = const Duration(seconds: 5),
+    Duration timerMoveDuration = const Duration(seconds: 5),
   ])  : _board = BoardImpl.fromString(board),
         _turn = turn,
         _state = state,
         _strategy = strategy.convertToObj,
-        _computerMoveDuration = computerMoveDuration,
-        _timer = GameTimer(moveDuration: moveDuration) {
+        _timer = GameTimer(moveDuration: timerMoveDuration) {
     _timer.addObserver(this);
   }
 
@@ -93,7 +93,7 @@ class GameImpl extends GameObservable implements Game, TimerObserver {
   Future<void> makeMove(Position pos, bool isComputerMove) async {
     if (isComputerMove) {
       _changeState(GameState.paused);
-      await Future.delayed(_computerMoveDuration);
+      await Future.delayed(strategyToDuration(_strategy));
       _changeState(GameState.playing);
     }
 
@@ -109,6 +109,17 @@ class GameImpl extends GameObservable implements Game, TimerObserver {
     } else if (_state.isDraw) {
       _notifyGameOver(GameStatus.draw);
     }
+  }
+
+  Duration strategyToDuration(GameStrategy? strategy) {
+    if (strategy is EasyStrategy) {
+      return Duration(milliseconds: Random().nextInt(100) + 400);
+    } else if (strategy is MediumStrategy) {
+      return Duration(milliseconds: Random().nextInt(500) + 500);
+    } else if (strategy is HardStrategy) {
+      return Duration(milliseconds: Random().nextInt(1000) + 1000);
+    }
+    return Duration.zero;
   }
 
   @override
