@@ -17,7 +17,7 @@ abstract class Game {
   MarkMatrix get boardRepresentation;
   GameStrategy? get strategy;
 
-  set setStrategy(GameStrategy strategy);
+  set setStrategy(GameStrategy? strategy);
   Future<void> placeMark(Position pos);
 
   void restart();
